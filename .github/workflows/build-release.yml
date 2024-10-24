@@ -64,13 +64,21 @@ jobs:
       with:
         build-mount-path: /builder
 
+    - name: Check space usage
+      if: (!cancelled())
+      run: |
+        echo "Free up disk space complete"
+        echo "=============================================================================="
+        df -hT
+        echo "=============================================================================="
+
     - name: Build System Setup
       uses: sbwml/actions@openwrt-build-setup
 
     - name: Compile OpenWrt
       working-directory: /builder
       id: compile
-      continue-on-error: true
+      continue-on-error: false
       run: |
         export GITHUB_REPO=${{ github.repository }}
         export ${{ github.event.inputs.build_options }}
